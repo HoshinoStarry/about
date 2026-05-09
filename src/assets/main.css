@@ -1,0 +1,132 @@
+@import './base.css';
+
+@font-face {
+  font-family: 'ChillRoundF';
+  src: url('https://cdn.jsdelivr.net/gh/Warren2060/ChillRound@main/ChillRoundF%20v3.0.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --ink: #181818;
+  --navy: #111111;
+  --muted: rgba(17, 17, 17, 0.62);
+  --paper: #f7f6f3;
+  --panel: #f2f1ee;
+  --panel-weak: #f7f6f3;
+  --panel-blue: #efeeeb;
+  --profile-card: transparent;
+  --line: rgba(17, 17, 17, 0.12);
+  --blue-strong: #111111;
+  --violet: #111111;
+  --gold: #111111;
+  --accent: #111111;
+  --chip-bg: #eceae6;
+  --chip-text: #222222;
+  --footer-bg: transparent;
+  --soft-shadow: none;
+  --page-bg: var(--paper);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --ink: rgba(255, 255, 255, 0.9);
+    --navy: #ffffff;
+    --muted: rgba(255, 255, 255, 0.56);
+    --paper: #090909;
+    --panel: #111111;
+    --panel-weak: #090909;
+    --panel-blue: #141414;
+    --profile-card: transparent;
+    --line: rgba(255, 255, 255, 0.14);
+    --blue-strong: #ffffff;
+    --violet: #ffffff;
+    --gold: #ffffff;
+    --accent: #ffffff;
+    --chip-bg: #151515;
+    --chip-text: rgba(255, 255, 255, 0.82);
+    --footer-bg: transparent;
+    --soft-shadow: none;
+    --page-bg: var(--paper);
+  }
+}
+
+:root[data-theme='dark'] {
+  --ink: rgba(255, 255, 255, 0.9);
+  --navy: #ffffff;
+  --muted: rgba(255, 255, 255, 0.56);
+  --paper: #090909;
+  --panel: #111111;
+  --panel-weak: #090909;
+  --panel-blue: #141414;
+  --profile-card: transparent;
+  --line: rgba(255, 255, 255, 0.14);
+  --blue-strong: #ffffff;
+  --violet: #ffffff;
+  --gold: #ffffff;
+  --accent: #ffffff;
+  --chip-bg: #151515;
+  --chip-text: rgba(255, 255, 255, 0.82);
+  --footer-bg: transparent;
+  --soft-shadow: none;
+  --page-bg: var(--paper);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--ink);
+  background: var(--page-bg);
+  font-family: 'ChillRoundF', 'Noto Sans SC', 'Hiragino Sans GB', 'Microsoft YaHei', Inter, system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: color 220ms ease, background 220ms ease;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
