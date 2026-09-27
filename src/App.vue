@@ -479,7 +479,7 @@ watch([themeMode, systemDark], () => {
   object-fit: cover;
   filter: grayscale(0.08);
   opacity: 0;
-  transition: opacity 180ms ease;
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .profile-image-active {
