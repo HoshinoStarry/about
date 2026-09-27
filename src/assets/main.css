@@ -8,6 +8,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'FOT Yuruka Title';
+  src: url('./fonts/FOT-Yuruka-Std-UB-title.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0048, U+0053, U+0061, U+0068-0069, U+006E-006F, U+0072, U+0073-0074, U+0079;
+}
+
 :root {
   --ink: #181818;
   --navy: #111111;

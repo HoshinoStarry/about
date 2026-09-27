@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import MarkdownIt from 'markdown-it';
 
 const props = defineProps({
@@ -8,6 +9,7 @@ const props = defineProps({
     required: true,
   },
 });
+const router = useRouter();
 
 const markdown = new MarkdownIt({
   html: false,
@@ -32,10 +34,35 @@ markdown.renderer.rules.link_open = (tokens, idx, options, env, self) => {
 };
 
 const html = computed(() => markdown.render(props.source));
+
+const handleLinkClick = (event) => {
+  if (
+    event.defaultPrevented
+    || event.button !== 0
+    || event.metaKey
+    || event.ctrlKey
+    || event.shiftKey
+    || event.altKey
+  ) return;
+
+  const anchor = event.target.closest('a');
+  const href = anchor?.getAttribute('href');
+
+  if (
+    !href
+    || !href.startsWith('/')
+    || href.startsWith('//')
+    || anchor.target === '_blank'
+    || anchor.hasAttribute('download')
+  ) return;
+
+  event.preventDefault();
+  router.push(href);
+};
 </script>
 
 <template>
-  <article class="markdown-content" v-html="html"></article>
+  <article class="markdown-content" @click="handleLinkClick" v-html="html"></article>
 </template>
 
 <style scoped>
@@ -125,7 +152,8 @@ const html = computed(() => markdown.render(props.source));
 .markdown-content :deep(a) {
   color: var(--blue-strong);
   font-weight: 800;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .markdown-content :deep(a:hover) {

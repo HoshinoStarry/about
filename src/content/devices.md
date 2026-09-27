@@ -1,4 +1,14 @@
-不是单纯“有几台电子产品”，更像是用设备记录自己对不同系统、平台和厂商设计思路的观察。新设备负责生产力，老设备负责实验和怀旧，最后一起负责占空间。
+这些设备大多是一路用下来留下的记录。新设备负责日常和生产力，老设备拿来实验、怀旧，顺便继续占地方。划掉的表示已经不在手上。
+
+### 台式机/家用服务器
+
+~~CPU: Intel Xeon E5-2673 v3 (12 Cores / 24 Threads)~~\
+CPU: Intel Xeon E5-2698B v3 (16 Cores / 32 Threads)\
+GPU: ASUS AMD Radeon RX 580 2048SP 8GB\
+RAM: 48GB DDR3 ECC 1600MHz (16GB + 16GB + 8GB + 8GB)\
+SSD: Crucial P3 Plus 1TB NVMe\
+HDD: 12TB (Seagate IronWolf 4TB × 2 + WD Red Plus 4TB)\
+NIC: Intel Wi-Fi 6 AX200 + Realtek Gigabit Ethernet
 
 ### 笔记本
 
@@ -37,9 +47,10 @@
 15. ~~Xiaomi 13 (Qualcomm Snapdragon 8 Gen 2 | 12+256)~~
 16. ~~Apple iPhone 5c (Apple A6 | 1+16)~~
 17. Apple iPhone 17 Pro (Apple A19 Pro | 12+512)
-18. Apple iPhone SE Gen 2 (Apple A13 | 3+64)
+18. ~~Apple iPhone SE Gen 2 (Apple A13 | 3+64)~~
 19. ~~Xiaomi 14 (Qualcomm Snapdragon 8 Gen 3 | 12+256)~~
 20. Xiaomi 15 (Qualcomm Snapdragon 8 Elite | 16+512)
+21. Apple iPhone 13 mini (Apple A15 | 4+128)
 
 ### 无线耳机
 

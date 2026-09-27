@@ -18,7 +18,7 @@ const githubTopLangsUrl = computed(() => `https://github-readme-stats-one-bice.v
 <template>
   <section class="page-panel">
     <p class="eyebrow">Intro</p>
-    <h2 class="title">个人主页简介</h2>
+    <h2 class="title">简单认识一下</h2>
     <MarkdownContent :source="homeMarkdown" />
     <div v-if="props.showGithubStats" class="embedded-github-stats">
       <h3 class="embedded-title">GitHub 统计</h3>

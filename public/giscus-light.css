@@ -1,0 +1,101 @@
+@import url('https://giscus.app/themes/light.css');
+
+@font-face {
+  font-family: 'ChillRoundF';
+  src: url('https://cdn.jsdelivr.net/gh/Warren2060/ChillRound@main/ChillRoundF%20v3.0.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --font-family-sans: 'ChillRoundF', 'Noto Sans SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-default: var(--font-family-sans);
+  background: #f7f6f3;
+}
+
+body {
+  background: #f7f6f3;
+}
+
+main {
+  --color-btn-text: #222222;
+  --color-btn-bg: #eceae6;
+  --color-btn-border: rgba(17, 17, 17, 0.12);
+  --color-btn-shadow: none;
+  --color-btn-inset-shadow: none;
+  --color-btn-hover-bg: #e4e2dd;
+  --color-btn-hover-border: rgba(17, 17, 17, 0.18);
+  --color-btn-active-bg: #ddd9d3;
+  --color-btn-active-border: rgba(17, 17, 17, 0.2);
+  --color-btn-selected-bg: #e4e2dd;
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-bg: #111111;
+  --color-btn-primary-border: #111111;
+  --color-btn-primary-shadow: none;
+  --color-btn-primary-inset-shadow: none;
+  --color-btn-primary-hover-bg: #2a2a2a;
+  --color-btn-primary-hover-border: #2a2a2a;
+  --color-btn-primary-selected-bg: #333333;
+  --color-btn-primary-selected-shadow: none;
+  --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.7);
+  --color-btn-primary-disabled-bg: rgba(17, 17, 17, 0.45);
+  --color-btn-primary-disabled-border: transparent;
+  --color-action-list-item-default-hover-bg: rgba(17, 17, 17, 0.06);
+  --color-segmented-control-bg: #eceae6;
+  --color-segmented-control-button-bg: #f7f6f3;
+  --color-segmented-control-button-selected-border: rgba(17, 17, 17, 0.2);
+  --color-fg-default: #181818;
+  --color-fg-muted: rgba(17, 17, 17, 0.62);
+  --color-fg-subtle: rgba(17, 17, 17, 0.48);
+  --color-canvas-default: #f7f6f3;
+  --color-canvas-overlay: #f7f6f3;
+  --color-canvas-inset: #efeeeb;
+  --color-canvas-subtle: #f2f1ee;
+  --color-border-default: rgba(17, 17, 17, 0.12);
+  --color-border-muted: rgba(17, 17, 17, 0.09);
+  --color-neutral-muted: rgba(17, 17, 17, 0.06);
+  --color-accent-fg: #111111;
+  --color-accent-emphasis: #111111;
+  --color-accent-muted: rgba(17, 17, 17, 0.2);
+  --color-accent-subtle: #eceae6;
+  --color-primer-shadow-inset: none;
+  --color-scale-gray-1: #eceae6;
+  --color-scale-blue-1: #ddd9d3;
+  --color-social-reaction-bg-hover: var(--color-scale-gray-1);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-1);
+}
+
+.gsc-main {
+  gap: 1.5rem;
+}
+
+.gsc-left-header > .color-text-secondary.text-sm {
+  display: none;
+}
+
+.gsc-comment-box:not(.gsc-comment-box-is-reply) {
+  border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+.gsc-comment-box-tabs {
+  border-start-end-radius: 0.9rem;
+  border-start-start-radius: 0.9rem;
+}
+
+.gsc-comment-box-write,
+.gsc-comment-box-textarea {
+  border-radius: 0.65rem;
+}
+
+.btn {
+  border-radius: 0.7rem;
+  font-weight: 700;
+}
+
+.gsc-social-reaction-summary-item,
+.gsc-reactions-button {
+  border-radius: 999px;
+}

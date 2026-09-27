@@ -5,7 +5,7 @@ import MyDevicesHistory from '@/components/contents/MyDevicesHistory.vue';
 <template>
   <section class="page-panel">
     <p class="eyebrow">Devices</p>
-    <h2 class="title">设备清单</h2>
+    <h2 class="title">用过的设备</h2>
     <MyDevicesHistory />
   </section>
 </template>

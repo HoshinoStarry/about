@@ -1,28 +1,34 @@
 <script setup>
-import { computed, ref, onBeforeUnmount, onMounted, watch } from 'vue';
+import { computed, markRaw, ref, onBeforeUnmount, onMounted, watch } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 
 import avatarImage from './assets/avatar.png';
+import avatarHoverImage from './assets/avatar-hover.png';
+import logoImage from './assets/logo.png';
 import wechatQrCode from './assets/wechat_mp_qrcode.jpg';
 
 import IconGithub from './components/icons/Github.vue';
 import IconBilibili from './components/icons/Bilibili.vue';
 import IconTelegram from './components/icons/Telegram.vue';
+import IconSteam from './components/icons/Steam.vue';
 import IconX from './components/icons/X.vue';
 import IconWeChat from './components/icons/WeChat.vue';
+import IconQQ from './components/icons/QQ.vue';
 import IconEmail from '@/components/icons/Email.vue';
 import { navRoutes } from '@/router';
 
 const name = ref('HoshinoStarry');
-const bio = ref('技术折腾人 / 可能是二次元 / 消费电子收藏与实验');
+const bio = ref('音游、动画、数码，还有一些普通日常');
 const siteIcp = ref('浙ICP备2025208590号-1');
-
-const tabItems = navRoutes;
+const sumiUrl = 'https://sumi.hoshino.host/';
+const sumiNoticeAcceptedKey = 'hoshino.sumi.ai-content-notice.accepted';
+const sumiMetaHiddenKey = 'hoshino.sumi.meta.hidden';
 
 const socialLinks = ref([
-  { name: 'Email', url: 'mailto:admin@hoshino.host', icon: IconEmail },
-  { name: 'Bilibili', url: 'https://space.bilibili.com/179663677', icon: IconBilibili },
-  { name: 'WeChat', url: '', icon: IconWeChat },
+  { name: 'Email', url: 'mailto:admin@hoshino.host', icon: markRaw(IconEmail) },
+  { name: 'Bilibili', url: 'https://space.bilibili.com/179663677', icon: markRaw(IconBilibili) },
+  { name: 'QQ', url: 'https://wpa.qq.com/msgrd?v=3&uin=2583080860&site=qq&menu=yes', icon: markRaw(IconQQ) },
+  { name: 'WeChat', url: '', icon: markRaw(IconWeChat) },
 ]);
 
 const formatClassName = (value) => value
@@ -34,16 +40,40 @@ const formatClassName = (value) => value
 const socialButtonClass = (social) => `social-button-${formatClassName(social.name)}`;
 
 const overseaSocialLinks = ref([
-  { name: 'GitHub', url: 'https://github.com/HoshinoStarry', icon: IconGithub },
-  { name: 'Telegram', url: 'https://t.me/HoshinoStarry', icon: IconTelegram },
-  { name: 'X(Twitter)', url: 'https://twitter.com/HoshinoStarry', icon: IconX },
+  { name: 'GitHub', url: 'https://github.com/HoshinoStarry', icon: markRaw(IconGithub) },
+  { name: 'Steam', url: 'https://steamcommunity.com/id/HoshinoStarry/', icon: markRaw(IconSteam) },
+  { name: 'Telegram', url: 'https://t.me/HoshinoStarry', icon: markRaw(IconTelegram) },
+  { name: 'X(Twitter)', url: 'https://twitter.com/HoshinoStarry', icon: markRaw(IconX) },
 ]);
 
 const nowYear = ref(new Date().getFullYear());
 const userIpInfo = ref({});
+const cloudflareNode = ref('');
 const isGeoResolved = ref(false);
+const isGeoCheckFinished = ref(false);
 const shouldShowOverseaContent = computed(() => isGeoResolved.value && userIpInfo.value.country_code !== 'CN');
+const tabItems = computed(() => navRoutes.filter(
+  (item) => !item.requiresOversea || shouldShowOverseaContent.value,
+));
+const userIsp = computed(() => (
+  userIpInfo.value.isp
+  || userIpInfo.value.organization
+  || userIpInfo.value.asn_organization
+  || '未知'
+));
+const userAsn = computed(() => {
+  const asn = String(userIpInfo.value.asn || '').trim();
+
+  if (!asn) return 'ASN未知';
+  return /^AS/i.test(asn) ? asn.toUpperCase() : `AS${asn}`;
+});
 const isWechatDialogOpen = ref(false);
+const isSumiNoticeOpen = ref(false);
+const isSumiMetaHidden = ref(false);
+const isProfileAlternate = ref(false);
+const heroCopy = ref(null);
+const heroCopyHeight = ref(72);
+let heroCopyResizeObserver;
 
 const themeMode = ref(null);
 const systemDark = ref(false);
@@ -83,6 +113,22 @@ const fetchUserLocationAndSocialLinks = async () => {
   } catch (error) {
     isGeoResolved.value = false;
     console.error('获取用户地理位置信息失败:', error);
+  } finally {
+    isGeoCheckFinished.value = true;
+  }
+};
+
+const fetchCloudflareNode = async () => {
+  try {
+    const response = await fetch('/', { method: 'HEAD', cache: 'no-store' });
+    const rayId = response.headers.get('cf-ray') || '';
+    const node = rayId.split('-').at(-1)?.toUpperCase() || '';
+
+    if (/^[A-Z]{3}$/.test(node)) {
+      cloudflareNode.value = node;
+    }
+  } catch (error) {
+    console.warn('获取 Cloudflare 节点信息失败:', error);
   }
 };
 
@@ -90,11 +136,81 @@ const showWechatDialog = () => {
   isWechatDialogOpen.value = true;
 };
 
+const showAlternateProfile = () => {
+  isProfileAlternate.value = true;
+};
+
+const showDefaultProfile = () => {
+  isProfileAlternate.value = false;
+};
+
+const toggleAlternateProfile = () => {
+  isProfileAlternate.value = !isProfileAlternate.value;
+};
+
 const closeWechatDialog = () => {
   isWechatDialogOpen.value = false;
 };
 
+const hasAcceptedSumiNotice = () => {
+  try {
+    return window.localStorage.getItem(sumiNoticeAcceptedKey) === 'true';
+  } catch (error) {
+    console.warn('无法读取 OC 提示状态:', error);
+    return false;
+  }
+};
+
+const hasHiddenSumiMeta = () => {
+  try {
+    return window.localStorage.getItem(sumiMetaHiddenKey) === 'true';
+  } catch (error) {
+    console.warn('无法读取 OC 入口状态:', error);
+    return false;
+  }
+};
+
+const openSumiPage = () => {
+  window.open(sumiUrl, '_blank', 'noopener,noreferrer');
+};
+
+const openSumiMeta = () => {
+  if (hasAcceptedSumiNotice()) {
+    openSumiPage();
+    return;
+  }
+
+  isSumiNoticeOpen.value = true;
+};
+
+const continueToSumi = () => {
+  try {
+    window.localStorage.setItem(sumiNoticeAcceptedKey, 'true');
+  } catch (error) {
+    console.warn('无法保存 OC 提示状态:', error);
+  }
+
+  isSumiNoticeOpen.value = false;
+  openSumiPage();
+};
+
+const dismissSumiMeta = () => {
+  try {
+    window.localStorage.setItem(sumiMetaHiddenKey, 'true');
+  } catch (error) {
+    console.warn('无法保存 OC 入口状态:', error);
+  }
+
+  isSumiNoticeOpen.value = false;
+  isSumiMetaHidden.value = true;
+};
+
+const closeSumiNotice = () => {
+  isSumiNoticeOpen.value = false;
+};
+
 onMounted(() => {
+  isSumiMetaHidden.value = hasHiddenSumiMeta();
   mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
   systemDark.value = mediaQuery.matches;
 
@@ -106,9 +222,16 @@ onMounted(() => {
   mediaQuery._personalIntroSync = syncSystemTheme;
   applyTheme();
   fetchUserLocationAndSocialLinks();
+  fetchCloudflareNode();
+
+  heroCopyResizeObserver = new ResizeObserver(([entry]) => {
+    heroCopyHeight.value = entry.borderBoxSize?.[0]?.blockSize || entry.contentRect.height;
+  });
+  heroCopyResizeObserver.observe(heroCopy.value);
 });
 
 onBeforeUnmount(() => {
+  heroCopyResizeObserver?.disconnect();
   if (mediaQuery?._personalIntroSync) {
     mediaQuery.removeEventListener('change', mediaQuery._personalIntroSync);
   }
@@ -124,10 +247,35 @@ watch([themeMode, systemDark], () => {
     <div class="container">
       <header class="hero">
         <div class="hero-main">
-          <img :src="avatarImage" alt="个人头像" class="profile-image" />
-          <div class="hero-copy">
-            <p class="hero-kicker">Personal site</p>
-            <h1>{{ name }}</h1>
+          <div class="profile-image-shell" :style="{ '--profile-size': `${heroCopyHeight}px` }">
+            <img
+              :src="avatarImage"
+              alt="HoshinoStarry 的头像"
+              class="profile-image profile-image-default"
+              :class="{ 'profile-image-active': !isProfileAlternate }"
+            />
+            <img
+              :src="avatarHoverImage"
+              alt=""
+              aria-hidden="true"
+              class="profile-image profile-image-alternate"
+              :class="{ 'profile-image-active': isProfileAlternate }"
+            />
+            <button
+              type="button"
+              class="profile-image-trigger"
+              aria-label="切换头像"
+              @pointerenter="showAlternateProfile"
+              @pointerleave="showDefaultProfile"
+              @focus="showAlternateProfile"
+              @blur="showDefaultProfile"
+              @click="toggleAlternateProfile"
+            ></button>
+          </div>
+          <div ref="heroCopy" class="hero-copy">
+            <h1 class="hero-title">
+              <img :src="logoImage" alt="HoshinoStarry" class="hero-logo" />
+            </h1>
             <p class="hero-bio">{{ bio }}</p>
           </div>
         </div>
@@ -169,9 +317,22 @@ watch([themeMode, systemDark], () => {
               active-class="is-active"
               :to="item.path"
             >
-              {{ item.label }}
+              <span class="material-symbols-rounded tab-icon" aria-hidden="true">{{ item.icon }}</span>
+              <span class="tab-label">{{ item.label }}</span>
             </RouterLink>
           </nav>
+
+          <button
+            v-if="!isSumiMetaHidden"
+            class="sumi-meta-button"
+            type="button"
+            aria-haspopup="dialog"
+            :aria-expanded="isSumiNoticeOpen"
+            @click="openSumiMeta"
+          >
+            <span>OC</span>
+            <span class="material-icons sumi-meta-icon" aria-hidden="true">open_in_new</span>
+          </button>
 
           <button class="theme-toggle" type="button" :aria-label="`切换主题，当前为${themeLabel}`" :title="themeLabel" @click="cycleTheme">
             <svg v-if="resolvedTheme === 'dark'" viewBox="0 0 24 24" aria-hidden="true">
@@ -189,17 +350,50 @@ watch([themeMode, systemDark], () => {
         <RouterView v-slot="{ Component, route }">
           <Transition name="tab-panel" mode="out-in" appear>
             <section :key="route.fullPath" class="page-section">
-              <component :is="Component" :show-github-stats="shouldShowOverseaContent" />
+              <component
+                :is="Component"
+                :show-github-stats="route.name === 'intro' ? shouldShowOverseaContent : undefined"
+                :allow-github-content="route.name === 'guestbook' ? shouldShowOverseaContent : undefined"
+                :geo-resolved="route.name === 'guestbook' ? isGeoResolved : undefined"
+                :geo-check-finished="route.name === 'guestbook' ? isGeoCheckFinished : undefined"
+                :theme="route.name === 'guestbook' ? resolvedTheme : undefined"
+              />
             </section>
           </Transition>
         </RouterView>
       </main>
 
       <footer class="footer">
-        <p>&copy; {{ nowYear }} HoshinoStarry</p>
-        <p v-if="userIpInfo.ip">您的IP地址: {{ userIpInfo.ip }} ({{ userIpInfo.country }})</p>
         <p class="icp-info">
+          &copy; {{ nowYear }} {{ name }} ·
+          <strong>除另有说明外，本站部分内容由生成式人工智能生成</strong> ·
           <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">{{ siteIcp }}</a>
+        </p>
+        <p v-if="userIpInfo.ip">
+          您的IP地址:
+          <a
+            :href="`https://ip.sb/ip/${encodeURIComponent(userIpInfo.ip)}`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{{ userIpInfo.ip }}</a>
+          ({{ userIpInfo.country || '未知国家' }} {{ userIpInfo.region || '未知地区' }} {{ userIpInfo.city || '未知城市' }} - {{ userIsp }} · {{ userAsn }})
+          <template v-if="cloudflareNode">
+            ·
+            <a
+              class="cloudflare-node"
+              href="https://www.cloudflare.com/network/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="查看 Cloudflare 全球网络"
+            >
+              <svg class="cloudflare-node-icon" viewBox="50 0 49.5 22.2" aria-hidden="true">
+                <path fill="#fff" d="M94.7 10.6 89.1 9.3l-1-.4-25.7.2v12.4l32.3.1Z" />
+                <path fill="#f48120" d="M84.2 20.4a2.86 2.86 0 0 0-.3-2.6 3.1 3.1 0 0 0-2.1-1.1l-17.4-.2-.3-.1a.19.19 0 0 1 0-.3c.1-.2.2-.3.4-.3l17.5-.2a6.3 6.3 0 0 0 5.1-3.8l1-2.6v-.3a11.4 11.4 0 0 0-21.9-1.2 5.46 5.46 0 0 0-3.6-1 5.2 5.2 0 0 0-4.6 4.6 5.46 5.46 0 0 0 .1 1.8 7.3 7.3 0 0 0-7.1 7.3 4.1 4.1 0 0 0 .1 1.1.32.32 0 0 0 .3.3h32.1c.2 0 .4-.1.4-.3Z" />
+                <path fill="#faad3f" d="M89.7 9.2h-.5l-.3.2-.7 2.4a2.86 2.86 0 0 0 .3 2.6 3.1 3.1 0 0 0 2.1 1.1l3.7.2.3.1a.19.19 0 0 1 0 .3c-.1.2-.2.3-.4.3l-3.8.2a6.3 6.3 0 0 0-5.1 3.8l-.2.9c-.1.1 0 .3.2.3h13.2a.27.27 0 0 0 .3-.3 10.87 10.87 0 0 0 .4-2.6 9.56 9.56 0 0 0-9.5-9.5" />
+              </svg>
+              <span>{{ cloudflareNode }}</span>
+            </a>
+          </template>
         </p>
       </footer>
     </div>
@@ -208,13 +402,32 @@ watch([themeMode, systemDark], () => {
       <div v-if="isWechatDialogOpen" class="wechat-dialog-layer" role="presentation" @click.self="closeWechatDialog">
         <section class="wechat-dialog" role="dialog" aria-modal="true" aria-labelledby="wechat-dialog-title">
           <button class="wechat-dialog-x" type="button" aria-label="关闭微信公众号弹窗" @click="closeWechatDialog">×</button>
-          <p class="dialog-eyebrow">WeChat</p>
           <h2 id="wechat-dialog-title" class="wechat-dialog-title">微信公众号</h2>
           <div class="wechat-qr-shell">
             <img :src="wechatQrCode" alt="微信公众号二维码" class="wechat-qr" />
           </div>
           <div class="wechat-dialog-actions">
             <button class="wechat-close-button" type="button" @click="closeWechatDialog">关闭</button>
+          </div>
+        </section>
+      </div>
+    </Transition>
+
+    <Transition name="wechat-dialog-fade">
+      <div v-if="isSumiNoticeOpen" class="wechat-dialog-layer" role="presentation" @click.self="closeSumiNotice">
+        <section
+          class="wechat-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="sumi-notice-title"
+          aria-describedby="sumi-notice-description"
+        >
+          <button class="wechat-dialog-x" type="button" aria-label="关闭 OC 提示" @click="closeSumiNotice">×</button>
+          <h2 id="sumi-notice-title" class="wechat-dialog-title">提示</h2>
+          <p id="sumi-notice-description" class="sumi-notice-description">此页面包含大量由生成式人工智能生成的作品，是否继续访问？</p>
+          <div class="sumi-dialog-actions">
+            <button class="sumi-dialog-button" type="button" @click="dismissSumiMeta">算了</button>
+            <button class="sumi-dialog-button sumi-dialog-button-primary" type="button" @click="continueToSumi">继续</button>
           </div>
         </section>
       </div>
@@ -235,6 +448,7 @@ watch([themeMode, systemDark], () => {
 }
 
 .hero {
+  position: relative;
   display: grid;
   gap: 1.5rem;
   padding-bottom: clamp(1rem, 1vw, 1.5rem);
@@ -246,20 +460,48 @@ watch([themeMode, systemDark], () => {
   gap: 1.25rem;
 }
 
+.profile-image-shell {
+  position: relative;
+  flex: none;
+  width: var(--profile-size, 72px);
+  height: var(--profile-size, 72px);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
 .profile-image {
-  width: 72px;
-  height: 72px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 5px solid white;
   border-radius: 50%;
   object-fit: cover;
   filter: grayscale(0.08);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.profile-image-active {
+  opacity: 1;
+}
+
+.profile-image-trigger {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+  outline-offset: -3px;
 }
 
 .hero-copy {
   min-width: 0;
 }
 
-.hero-kicker,
-.dialog-eyebrow {
+.hero-kicker {
   margin: 0 0 0.35rem;
   color: var(--muted);
   font-size: 0.75rem;
@@ -267,18 +509,25 @@ watch([themeMode, systemDark], () => {
   text-transform: uppercase;
 }
 
-h1 {
-  margin: 0;
-  color: var(--navy);
-  font-size: clamp(2.35rem, 8vw, 4.4rem);
-  line-height: 0.95;
-  font-weight: 700;
-  letter-spacing: -0.06em;
+.hero-kicker {
+  padding-right: 3.25rem;
+}
+
+.hero-title {
+  margin: 12px 0;
+  line-height: 0;
+}
+
+.hero-logo {
+  display: block;
+  width: clamp(15rem, 48vw, 22rem);
+  max-width: 100%;
+  height: auto;
 }
 
 .hero-bio {
   max-width: 34rem;
-  margin-top: 0.8rem;
+  margin-top: 2rem;
   color: var(--muted);
   font-size: 0.98rem;
 }
@@ -297,6 +546,7 @@ h1 {
 }
 
 .tab-button,
+.sumi-meta-button,
 .theme-toggle {
   border: 0;
   color: var(--muted);
@@ -304,7 +554,8 @@ h1 {
   font: inherit;
 }
 
-.tab-button {
+.tab-button,
+.sumi-meta-button {
   padding: 0;
   text-decoration: none;
   font-size: 0.95rem;
@@ -312,17 +563,49 @@ h1 {
   transition: color 160ms ease, opacity 160ms ease;
 }
 
+.tab-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tab-icon {
+  font-size: 1rem;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  line-height: 1;
+}
+
 .tab-button:hover,
+.sumi-meta-button:hover,
 .tab-button.is-active {
   color: var(--navy);
 }
 
+.sumi-meta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+}
+
+.sumi-meta-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
 .tab-button.is-active {
+  text-decoration: none;
+}
+
+.tab-button.is-active .tab-label {
   text-decoration: underline;
   text-underline-offset: 0.28rem;
 }
 
 .theme-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
   display: grid;
   width: 2.25rem;
   height: 2.25rem;
@@ -366,8 +649,73 @@ h1 {
   transition: color 160ms ease, opacity 160ms ease;
 }
 
-.social-button:hover {
-  color: var(--navy);
+.social-button-email {
+  --social-hover: #2563eb;
+}
+
+.social-button-bilibili {
+  --social-hover: #0078a5;
+}
+
+.social-button-wechat {
+  --social-hover: #087d38;
+}
+
+.social-button-qq {
+  --social-hover: #087caf;
+}
+
+.social-button-github {
+  --social-hover: #076f24;
+}
+
+.social-button-steam {
+  --social-hover: #0f739d;
+}
+
+.social-button-telegram {
+  --social-hover: #08739b;
+}
+
+.social-button-x-twitter {
+  --social-hover: #000000;
+}
+
+:global(:root[data-theme='dark'] .social-button-email) {
+  --social-hover: #60a5fa;
+}
+
+:global(:root[data-theme='dark'] .social-button-bilibili) {
+  --social-hover: #00aeec;
+}
+
+:global(:root[data-theme='dark'] .social-button-wechat) {
+  --social-hover: #07c160;
+}
+
+:global(:root[data-theme='dark'] .social-button-qq) {
+  --social-hover: #1ebafc;
+}
+
+:global(:root[data-theme='dark'] .social-button-github) {
+  --social-hover: #5fed83;
+}
+
+:global(:root[data-theme='dark'] .social-button-steam) {
+  --social-hover: #66c0f4;
+}
+
+:global(:root[data-theme='dark'] .social-button-telegram) {
+  --social-hover: #2aabee;
+}
+
+:global(:root[data-theme='dark'] .social-button-x-twitter) {
+  --social-hover: #ffffff;
+}
+
+.social-button:hover,
+.social-button:focus-visible {
+  color: var(--social-hover, var(--navy));
 }
 
 .social-icon-wrap {
@@ -437,9 +785,32 @@ h1 {
   font-size: 0.82rem;
 }
 
-.icp-info a {
+.cloudflare-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
   color: inherit;
   text-decoration: none;
+  white-space: nowrap;
+}
+
+.cloudflare-node:hover,
+.cloudflare-node:focus-visible {
+  color: var(--navy);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.cloudflare-node-icon {
+  width: 1.35em;
+  height: 0.75em;
+  flex: none;
+}
+
+.icp-info a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .icp-info a:hover {
@@ -506,6 +877,40 @@ h1 {
   cursor: pointer;
 }
 
+.sumi-notice-description {
+  margin-top: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.sumi-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.sumi-dialog-button {
+  min-height: 2.75rem;
+  padding: 0 0.25rem;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+
+.sumi-dialog-button:hover,
+.sumi-dialog-button:focus-visible,
+.sumi-dialog-button-primary {
+  color: var(--navy);
+}
+
+.sumi-dialog-button-primary {
+  font-weight: 700;
+}
+
 .wechat-dialog-fade-enter-active,
 .wechat-dialog-fade-leave-active {
   transition: opacity 180ms ease;
@@ -523,11 +928,6 @@ h1 {
 
   .hero-main {
     align-items: flex-start;
-  }
-
-  .hero-meta {
-    align-items: flex-start;
-    flex-direction: column;
   }
 }
 </style>

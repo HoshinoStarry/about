@@ -4,9 +4,113 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="/avatar.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人介绍页面</title>
+    <title>HoshinoStarry | 个人主页</title>
+    <meta name="description" content="HoshinoStarry 的个人主页，记录兴趣、设备和一些日常。">
+    <link rel="canonical" href="https://about.hoshino.host/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="HoshinoStarry | 个人主页">
+    <meta property="og:description" content="记录兴趣、设备和一些日常。">
+    <meta property="og:url" content="https://about.hoshino.host/">
+    <meta property="og:image" content="https://about.hoshino.host/avatar.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="author" content="HoshinoStarry">
+    <link rel="alternate" type="text/markdown" href="/assets/markdown/home.md" title="简介 Markdown">
+    <link rel="alternate" type="text/markdown" href="/assets/markdown/about.md" title="关于 Markdown">
+    <link rel="alternate" type="text/markdown" href="/assets/markdown/devices.md" title="设备 Markdown">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://about.hoshino.host/#website",
+            "url": "https://about.hoshino.host/",
+            "name": "HoshinoStarry",
+            "description": "HoshinoStarry 的个人主页，记录兴趣、设备和一些日常。",
+            "inLanguage": "zh-CN",
+            "publisher": {
+              "@id": "https://about.hoshino.host/#person"
+            }
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://about.hoshino.host/#profile-page",
+            "url": "https://about.hoshino.host/",
+            "name": "HoshinoStarry 的个人主页",
+            "description": "关于 HoshinoStarry 的兴趣、日常、相处方式和设备记录。",
+            "inLanguage": "zh-CN",
+            "isPartOf": {
+              "@id": "https://about.hoshino.host/#website"
+            },
+            "mainEntity": {
+              "@id": "https://about.hoshino.host/#person"
+            },
+            "encoding": {
+              "@type": "MediaObject",
+              "encodingFormat": "text/markdown",
+              "contentUrl": "https://about.hoshino.host/assets/markdown/home.md"
+            },
+            "hasPart": [
+              {
+                "@type": "WebPage",
+                "@id": "https://about.hoshino.host/about",
+                "url": "https://about.hoshino.host/about",
+                "name": "关于我",
+                "description": "更详细的兴趣、经历和相处边界。",
+                "inLanguage": "zh-CN",
+                "encoding": {
+                  "@type": "MediaObject",
+                  "encodingFormat": "text/markdown",
+                  "contentUrl": "https://about.hoshino.host/assets/markdown/about.md"
+                }
+              },
+              {
+                "@type": "WebPage",
+                "@id": "https://about.hoshino.host/devices",
+                "url": "https://about.hoshino.host/devices",
+                "name": "用过的设备",
+                "description": "HoshinoStarry 使用过的电脑、平板、手机、耳机和可穿戴设备。",
+                "inLanguage": "zh-CN",
+                "encoding": {
+                  "@type": "MediaObject",
+                  "encodingFormat": "text/markdown",
+                  "contentUrl": "https://about.hoshino.host/assets/markdown/devices.md"
+                }
+              }
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://about.hoshino.host/#person",
+            "name": "HoshinoStarry",
+            "alternateName": [
+              "星野",
+              "hsnsty",
+              "h11y"
+            ],
+            "url": "https://about.hoshino.host/",
+            "image": "https://about.hoshino.host/avatar.png",
+            "description": "住在杭州，喜欢音游、动画、轻百合、数码设备和软件开发。",
+            "knowsAbout": [
+              "软件开发",
+              "操作系统",
+              "消费电子",
+              "音游",
+              "动画"
+            ],
+            "mainEntityOfPage": {
+              "@id": "https://about.hoshino.host/#profile-page"
+            },
+            "sameAs": [
+              "https://space.bilibili.com/179663677"
+            ]
+          }
+        ]
+      }
+    </script>
     <!-- 使用国内镜像加速 Material Icons 加载 -->
     <link href="https://fonts.loli.net/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.loli.net/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,0,0" rel="stylesheet">
   </head>
   <body>
     <div id="app"></div>

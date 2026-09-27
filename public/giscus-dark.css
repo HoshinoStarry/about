@@ -1,0 +1,100 @@
+@import url('https://giscus.app/themes/dark.css');
+
+@font-face {
+  font-family: 'ChillRoundF';
+  src: url('https://cdn.jsdelivr.net/gh/Warren2060/ChillRound@main/ChillRoundF%20v3.0.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --font-family-sans: 'ChillRoundF', 'Noto Sans SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-default: var(--font-family-sans);
+}
+
+body {
+  background: transparent;
+}
+
+main {
+  --color-btn-text: rgba(255, 255, 255, 0.86);
+  --color-btn-bg: #151515;
+  --color-btn-border: rgba(255, 255, 255, 0.14);
+  --color-btn-shadow: none;
+  --color-btn-inset-shadow: none;
+  --color-btn-hover-bg: #202020;
+  --color-btn-hover-border: rgba(255, 255, 255, 0.24);
+  --color-btn-active-bg: #272727;
+  --color-btn-active-border: rgba(255, 255, 255, 0.28);
+  --color-btn-selected-bg: #202020;
+  --color-btn-primary-text: #090909;
+  --color-btn-primary-bg: #ffffff;
+  --color-btn-primary-border: #ffffff;
+  --color-btn-primary-shadow: none;
+  --color-btn-primary-inset-shadow: none;
+  --color-btn-primary-hover-bg: rgba(255, 255, 255, 0.86);
+  --color-btn-primary-hover-border: rgba(255, 255, 255, 0.86);
+  --color-btn-primary-selected-bg: rgba(255, 255, 255, 0.76);
+  --color-btn-primary-selected-shadow: none;
+  --color-btn-primary-disabled-text: rgba(9, 9, 9, 0.62);
+  --color-btn-primary-disabled-bg: rgba(255, 255, 255, 0.42);
+  --color-btn-primary-disabled-border: transparent;
+  --color-action-list-item-default-hover-bg: rgba(255, 255, 255, 0.08);
+  --color-segmented-control-bg: #151515;
+  --color-segmented-control-button-bg: #090909;
+  --color-segmented-control-button-selected-border: rgba(255, 255, 255, 0.25);
+  --color-fg-default: rgba(255, 255, 255, 0.9);
+  --color-fg-muted: rgba(255, 255, 255, 0.56);
+  --color-fg-subtle: rgba(255, 255, 255, 0.44);
+  --color-canvas-default: transparent;
+  --color-canvas-overlay: #111111;
+  --color-canvas-inset: #141414;
+  --color-canvas-subtle: #141414;
+  --color-border-default: rgba(255, 255, 255, 0.14);
+  --color-border-muted: rgba(255, 255, 255, 0.1);
+  --color-neutral-muted: rgba(255, 255, 255, 0.08);
+  --color-accent-fg: #ffffff;
+  --color-accent-emphasis: #ffffff;
+  --color-accent-muted: rgba(255, 255, 255, 0.24);
+  --color-accent-subtle: #151515;
+  --color-primer-shadow-inset: none;
+  --color-scale-gray-7: #202020;
+  --color-scale-blue-8: #2a2a2a;
+  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+}
+
+.gsc-main {
+  gap: 1.5rem;
+}
+
+.gsc-left-header > .color-text-secondary.text-sm {
+  display: none;
+}
+
+.gsc-comment-box:not(.gsc-comment-box-is-reply) {
+  border-radius: 0.9rem;
+  overflow: hidden;
+}
+
+.gsc-comment-box-tabs {
+  border-start-end-radius: 0.9rem;
+  border-start-start-radius: 0.9rem;
+}
+
+.gsc-comment-box-write,
+.gsc-comment-box-textarea {
+  border-radius: 0.65rem;
+}
+
+.btn {
+  border-radius: 0.7rem;
+  font-weight: 700;
+}
+
+.gsc-social-reaction-summary-item,
+.gsc-reactions-button {
+  border-radius: 999px;
+}
