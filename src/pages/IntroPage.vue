@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import MarkdownContent from '@/components/common/MarkdownContent.vue';
+import GitHubActivity from '@/components/GitHubActivity.vue';
 import homeMarkdown from '@/content/home.md?raw';
 
 const props = defineProps({
@@ -34,6 +35,7 @@ const githubTopLangsUrl = computed(() => `https://github-readme-stats-one-bice.v
           class="langs-image"
         />
       </div>
+      <GitHubActivity />
     </div>
     <div class="embedded-music">
       <h3 class="embedded-title">常听的</h3>
