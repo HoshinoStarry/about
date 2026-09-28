@@ -449,7 +449,7 @@ watch([themeMode, systemDark], () => {
 
 .hero-main {
   --hero-logo-height: calc(var(--hero-row-height) * 0.7);
-  --hero-row-height: max(4.25rem, 18vw);
+  --hero-row-height: max(10rem, 18vw);
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
