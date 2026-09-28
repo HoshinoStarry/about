@@ -448,11 +448,11 @@ watch([themeMode, systemDark], () => {
 }
 
 .hero-main {
-  --hero-row-height: clamp(4.75rem, 18vw, 8rem);
+  --hero-row-height: clamp(4.25rem, 16vw, 7rem);
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  padding-right: 3.75rem;
+  padding-right: 3rem;
   gap: 1.25rem;
 }
 
@@ -931,8 +931,8 @@ watch([themeMode, systemDark], () => {
 
   .hero-main {
     align-items: flex-start;
-    --hero-row-height: clamp(4rem, 16vw, 5.5rem);
-    padding-right: 3rem;
+    --hero-row-height: clamp(4.25rem, 16vw, 5.5rem);
+    padding-right: 3.25rem;
     gap: 1rem;
   }
 }
