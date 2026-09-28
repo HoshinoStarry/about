@@ -448,8 +448,8 @@ watch([themeMode, systemDark], () => {
 }
 
 .hero-main {
-  --hero-logo-height: clamp(3rem, 11.2vw, 4.9rem);
-  --hero-row-height: clamp(4.25rem, 16vw, 7rem);
+  --hero-logo-height: calc(var(--hero-row-height) * 0.7);
+  --hero-row-height: max(4.25rem, 18vw);
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -932,8 +932,7 @@ watch([themeMode, systemDark], () => {
 
   .hero-main {
     align-items: flex-start;
-    --hero-logo-height: calc(var(--hero-row-height) * 0.7);
-    --hero-row-height: clamp(4.25rem, 16vw, 5.5rem);
+    --hero-row-height: max(10rem, 18vw);
     padding-right: 3.25rem;
     gap: 1rem;
   }
