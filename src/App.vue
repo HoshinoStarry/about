@@ -931,7 +931,7 @@ watch([themeMode, systemDark], () => {
   }
 
   .hero-main {
-    align-items: flex-start;
+    align-items: flex-end;
     --hero-row-height: max(10rem, 18vw);
     padding-right: 3.25rem;
     gap: 1rem;
