@@ -136,14 +136,6 @@ const showWechatDialog = () => {
   isWechatDialogOpen.value = true;
 };
 
-const showAlternateProfile = () => {
-  isProfileAlternate.value = true;
-};
-
-const showDefaultProfile = () => {
-  isProfileAlternate.value = false;
-};
-
 const toggleAlternateProfile = () => {
   isProfileAlternate.value = !isProfileAlternate.value;
 };
@@ -265,10 +257,6 @@ watch([themeMode, systemDark], () => {
               type="button"
               class="profile-image-trigger"
               aria-label="切换头像"
-              @pointerenter="showAlternateProfile"
-              @pointerleave="showDefaultProfile"
-              @focus="showAlternateProfile"
-              @blur="showDefaultProfile"
               @click="toggleAlternateProfile"
             ></button>
           </div>
