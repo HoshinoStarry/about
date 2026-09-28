@@ -448,6 +448,7 @@ watch([themeMode, systemDark], () => {
 }
 
 .hero-main {
+  --hero-logo-height: clamp(3rem, 11.2vw, 4.9rem);
   --hero-row-height: clamp(4.25rem, 16vw, 7rem);
   display: flex;
   flex-wrap: nowrap;
@@ -514,7 +515,7 @@ watch([themeMode, systemDark], () => {
   flex: 1 1 auto;
   align-items: center;
   min-width: 0;
-  height: var(--hero-row-height);
+  height: var(--hero-logo-height);
   margin: 0;
   line-height: 0;
 }
@@ -931,6 +932,7 @@ watch([themeMode, systemDark], () => {
 
   .hero-main {
     align-items: flex-start;
+    --hero-logo-height: calc(var(--hero-row-height) * 0.7);
     --hero-row-height: clamp(4.25rem, 16vw, 5.5rem);
     padding-right: 3.25rem;
     gap: 1rem;
