@@ -71,9 +71,6 @@ const isWechatDialogOpen = ref(false);
 const isSumiNoticeOpen = ref(false);
 const isSumiMetaHidden = ref(false);
 const isProfileAlternate = ref(false);
-const heroCopy = ref(null);
-const heroCopyHeight = ref(72);
-let heroCopyResizeObserver;
 
 const themeMode = ref(null);
 const systemDark = ref(false);
@@ -134,6 +131,16 @@ const fetchCloudflareNode = async () => {
 
 const showWechatDialog = () => {
   isWechatDialogOpen.value = true;
+};
+
+const showAlternateProfile = (event) => {
+  if (event.pointerType !== 'mouse') return;
+  isProfileAlternate.value = true;
+};
+
+const showDefaultProfile = (event) => {
+  if (event.pointerType !== 'mouse') return;
+  isProfileAlternate.value = false;
 };
 
 const toggleAlternateProfile = () => {
@@ -216,14 +223,9 @@ onMounted(() => {
   fetchUserLocationAndSocialLinks();
   fetchCloudflareNode();
 
-  heroCopyResizeObserver = new ResizeObserver(([entry]) => {
-    heroCopyHeight.value = entry.borderBoxSize?.[0]?.blockSize || entry.contentRect.height;
-  });
-  heroCopyResizeObserver.observe(heroCopy.value);
 });
 
 onBeforeUnmount(() => {
-  heroCopyResizeObserver?.disconnect();
   if (mediaQuery?._personalIntroSync) {
     mediaQuery.removeEventListener('change', mediaQuery._personalIntroSync);
   }
@@ -239,7 +241,11 @@ watch([themeMode, systemDark], () => {
     <div class="container">
       <header class="hero">
         <div class="hero-main">
-          <div class="profile-image-shell" :style="{ '--profile-size': `${heroCopyHeight}px` }">
+          <div
+            class="profile-image-shell"
+            @pointerenter="showAlternateProfile"
+            @pointerleave="showDefaultProfile"
+          >
             <img
               :src="avatarImage"
               alt="HoshinoStarry 的头像"
@@ -260,13 +266,12 @@ watch([themeMode, systemDark], () => {
               @click="toggleAlternateProfile"
             ></button>
           </div>
-          <div ref="heroCopy" class="hero-copy">
-            <h1 class="hero-title">
-              <img :src="logoImage" alt="HoshinoStarry" class="hero-logo" />
-            </h1>
-            <p class="hero-bio">{{ bio }}</p>
-          </div>
+          <h1 class="hero-title">
+            <img :src="logoImage" alt="HoshinoStarry" class="hero-logo" />
+          </h1>
         </div>
+
+        <p class="hero-bio">{{ bio }}</p>
 
         <div class="social-links">
           <template v-for="(social, index) in socialLinks" :key="index">
@@ -443,16 +448,19 @@ watch([themeMode, systemDark], () => {
 }
 
 .hero-main {
+  --hero-row-height: clamp(4.25rem, 16vw, 7rem);
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
+  padding-right: 3rem;
   gap: 1.25rem;
 }
 
 .profile-image-shell {
   position: relative;
   flex: none;
-  width: var(--profile-size, 72px);
-  height: var(--profile-size, 72px);
+  width: var(--hero-row-height);
+  height: var(--hero-row-height);
   border-radius: 50%;
   overflow: hidden;
 }
@@ -502,20 +510,27 @@ watch([themeMode, systemDark], () => {
 }
 
 .hero-title {
-  margin: 12px 0;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  min-width: 0;
+  height: var(--hero-row-height);
+  margin: 0;
   line-height: 0;
 }
 
 .hero-logo {
   display: block;
-  width: clamp(15rem, 48vw, 22rem);
+  width: auto;
   max-width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .hero-bio {
   max-width: 34rem;
-  margin-top: 2rem;
+  margin-top: 0;
   color: var(--muted);
   font-size: 0.98rem;
 }
@@ -916,6 +931,9 @@ watch([themeMode, systemDark], () => {
 
   .hero-main {
     align-items: flex-start;
+    --hero-row-height: clamp(3.75rem, 14vw, 5rem);
+    padding-right: calc(2.25rem + 0.75rem);
+    gap: 1rem;
   }
 }
 </style>
