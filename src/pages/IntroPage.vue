@@ -21,10 +21,10 @@ const githubTopLangsUrl = computed(() => `https://github-readme-stats-one-bice.v
     <h2 class="title">简单认识一下</h2>
     <MarkdownContent :source="homeMarkdown" />
     <div class="embedded-music">
-      <h3 class="embedded-title">2025 Fav Collection</h3>
+      <h3 class="embedded-title">常听的</h3>
       <iframe
         src="https://embed.music.apple.com/cn/playlist/2025-fav-collection/pl.rp-M9C5y3y2px?l=en-GB"
-        title="2025 Fav Collection"
+        title="常听的"
         loading="lazy"
         allow="autoplay *; encrypted-media *; fullscreen *; picture-in-picture *"
         sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-presentation"
@@ -76,7 +76,7 @@ const githubTopLangsUrl = computed(() => `https://github-readme-stats-one-bice.v
 .embedded-music iframe {
   display: block;
   width: 100%;
-  aspect-ratio: 500 / 620;
+  height: 450px;
   border: 0;
   border-radius: 0.75rem;
 }
