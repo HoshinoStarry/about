@@ -20,6 +20,16 @@ const githubTopLangsUrl = computed(() => `https://github-readme-stats-one-bice.v
     <p class="eyebrow">Intro</p>
     <h2 class="title">简单认识一下</h2>
     <MarkdownContent :source="homeMarkdown" />
+    <div class="embedded-music">
+      <h3 class="embedded-title">2025 Fav Collection</h3>
+      <iframe
+        src="https://embed.music.apple.com/cn/playlist/2025-fav-collection/pl.rp-M9C5y3y2px?l=en-GB"
+        title="2025 Fav Collection"
+        loading="lazy"
+        allow="autoplay *; encrypted-media *; fullscreen *; picture-in-picture *"
+        sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-presentation"
+      ></iframe>
+    </div>
     <div v-if="props.showGithubStats" class="embedded-github-stats">
       <h3 class="embedded-title">GitHub 统计</h3>
       <div class="github-stats">
@@ -55,6 +65,20 @@ const githubTopLangsUrl = computed(() => `https://github-readme-stats-one-bice.v
   color: var(--navy);
   font-size: 1.35rem;
   font-weight: 700;
+}
+
+.embedded-music {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.embedded-music iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 500 / 620;
+  border: 0;
+  border-radius: 0.75rem;
 }
 
 .embedded-github-stats {
